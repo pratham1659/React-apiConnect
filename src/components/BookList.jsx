@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getBooks } from "../services/bookService";
-import "./BookList.css";
+import { Toaster, toast } from "react-hot-toast";
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -13,7 +13,8 @@ const BookList = () => {
         const data = await getBooks();
         setBooks(data);
       } catch (err) {
-        setError(`Failed to fetch books. Please try again later - ${err}`);
+        toast.error(`Failed to fetch books. - ${err}`);
+        setError(`Failed to fetch books. - ${err}`);
       } finally {
         setLoading(false);
       }
@@ -22,44 +23,65 @@ const BookList = () => {
     fetchBooks();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-2xl font-semibold text-gray-700">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-xl font-medium text-red-600">{error}</div>
+      </div>
+    );
+  }
+
+  if (books.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-xl font-medium text-gray-700">No books available. Please add some!</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container">
-      {loading ? (
-        <p className="message">Loading...</p>
-      ) : error ? (
-        <p className="message error">{error}</p>
-      ) : books.length === 0 ? (
-        <p className="message">No books available. Please add some!</p>
-      ) : (
-        <div className="book-list">
-          <h1 className="title">Book List</h1>
-          <div className="book-grid">
-            {books.map((book, index) => (
-              <div key={index} className="book-item">
-                <h3 className="book-title">{book.title}</h3>
-                <p>
-                  <strong>Author:</strong> {book.author}
+    <div className="container mx-auto px-4 py-8 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Book List</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {books.map((book, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-md overflow-hidden transition duration-300 ease-in-out transform hover:scale-105">
+            <div className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">{book.title}</h3>
+              <div className="space-y-2">
+                <p className="text-gray-600">
+                  <span className="font-medium">Author:</span> {book.author}
                 </p>
-                <p>
-                  <strong>Category:</strong> {book.category}
+                <p className="text-gray-600">
+                  <span className="font-medium">Category:</span> {book.category}
                 </p>
-                <p>
-                  <strong>Price:</strong> {book.price}
+                <p className="text-gray-600">
+                  <span className="font-medium">Price:</span> ${book.price.toFixed(2)}
                 </p>
-                <p>
-                  <strong>Rating:</strong> {book.rating}
+                <p className="text-gray-600">
+                  <span className="font-medium">Rating:</span> {book.rating.toFixed(1)}
                 </p>
-                <p>
-                  <strong>Stocks:</strong> {book.stock}
+                <p className="text-gray-600">
+                  <span className="font-medium">Stock:</span> {book.stock}
                 </p>
-                <p>
-                  <strong>Genre:</strong> {book.genres.join(", ")}
+                <p className="text-gray-600">
+                  <span className="font-medium">Genres:</span> {book.genres.join(", ")}
                 </p>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
