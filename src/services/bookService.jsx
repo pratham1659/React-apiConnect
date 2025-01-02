@@ -21,8 +21,44 @@ export const submitBook = async (formData) => {
 
   try {
     const response = await axios.post(API_URL, dataToSubmit);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+// Fetch book by ID
+export const getBookById = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/${id}`);
+    console.log("Fetched book by ID:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching book with ID ${id}:`, error.message);
+    throw new Error(`Failed to fetch book with ID ${id}`);
+  }
+};
+
+// Update a book
+export const updateBook = async (id, bookData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/${id}`, bookData);
+    console.log("Updated book:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating book with ID ${id}:`, error.message);
+    throw new Error(`Failed to update book with ID ${id}`);
+  }
+};
+
+// Function to delete a book by ID
+export const deleteBook = async (id) => {
+  try {
+    const response = await axios.delete(`${API_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleteing book with ID ${id}:`, error.message);
+    throw new Error(`Failed to delete book with ID ${id}`);
   }
 };

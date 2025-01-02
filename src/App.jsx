@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import BookList from "./components/BookList";
 import BookForm from "./components/BookForm";
+import BookUpdate from "./components/BookUpdate";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,6 +77,7 @@ function App() {
             />
             <Route path="/books" element={<BookList />} />
             <Route path="/add-book" element={<BookForm />} />
+            <Route path="/edit-book/:id" element={<BookUpdate />} />
           </Routes>
         </main>
 
