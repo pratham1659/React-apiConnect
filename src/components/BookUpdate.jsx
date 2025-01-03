@@ -1,25 +1,33 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getBookById, updateBook } from "../services/bookService";
 import { Toaster, toast } from "react-hot-toast";
 
-const EditBook = () => {
+const BookUpdate = () => {
   const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    author: "",
-    category: "",
-    price: "",
-    stock: "",
-    rating: "",
-    genres: "",
-  });
+  const [formData, setFormData] = useState(
+    location.state?.book || {
+      title: "",
+      author: "",
+      category: "",
+      price: "",
+      stock: "",
+      rating: "",
+      genres: [],
+    }
+  );
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
         const book = await getBookById(id);
+        setFormData({
+          ...book,
+          genres: Array.isArray(book.genres) ? book.genres : [],
+        });
+        console.log("Fetched book:", book); // Log the response
         setFormData(book);
       } catch (error) {
         toast.error(`Failed to fetch book details - ${error}`);
@@ -77,7 +85,6 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter book title"
           className="w-full p-2 border rounded mt-1"
-          required
         />
       </div>
       {/* Author Field */}
@@ -93,7 +100,6 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter author's name"
           className="w-full p-2 border rounded mt-1"
-          required
         />
       </div>
       {/* Category Field */}
@@ -109,7 +115,6 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter book category"
           className="w-full p-2 border rounded mt-1"
-          required
         />
       </div>
       {/* Price Field */}
@@ -141,7 +146,6 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter stock quantity"
           className="w-full p-2 border rounded mt-1"
-          required
         />
       </div>
 
@@ -158,10 +162,9 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter book rating (1-5)"
           className="w-full p-2 border rounded mt-1"
-          step="0.1"
+          step={0.1}
           min="1"
           max="5"
-          required
         />
       </div>
 
@@ -181,7 +184,9 @@ const EditBook = () => {
         />
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+      <button
+        type="submit"
+        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         Update Book
       </button>
       <Toaster position="top-right" reverseOrder={false} />
@@ -189,4 +194,4 @@ const EditBook = () => {
   );
 };
 
-export default EditBook;
+export default BookUpdate;
