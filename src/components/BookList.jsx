@@ -26,9 +26,9 @@ const BookList = () => {
     fetchBooks();
   }, []);
 
-  const handleEdit = (id) => {
-    if (id) {
-      navigate(`/edit-book/${id}`);
+  const handleEdit = (book) => {
+    if (book._id) {
+      navigate(`/edit-book/${book._id}`, { state: { book } });
     } else {
       toast.error("Error: id is undefined");
     }
@@ -100,7 +100,7 @@ const BookList = () => {
               </div>
               <div className="flex justify-between items-center">
                 <button
-                  onClick={() => handleEdit(book._id)}
+                  onClick={() => handleEdit(book)}
                   className="mt-4 px-4 py-2 bg-indigo-600 text-white font-medium text-sm rounded-md hover:bg-indigo-700 focus:outline-none">
                   Edit
                 </button>
