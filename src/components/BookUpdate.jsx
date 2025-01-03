@@ -6,7 +6,15 @@ import { Toaster, toast } from "react-hot-toast";
 const EditBook = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    category: "",
+    price: "",
+    stock: "",
+    rating: "",
+    genres: "",
+  });
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -42,7 +50,7 @@ const EditBook = () => {
     try {
       await updateBook(id, formData);
       toast.success("Book updated successfully");
-      navigate("/");
+      setTimeout(() => navigate("/books"), 1000);
     } catch (error) {
       toast.error(`Failed to update book - ${error}`);
     }
@@ -85,6 +93,7 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter author's name"
           className="w-full p-2 border rounded mt-1"
+          required
         />
       </div>
       {/* Category Field */}
@@ -100,6 +109,7 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter book category"
           className="w-full p-2 border rounded mt-1"
+          required
         />
       </div>
       {/* Price Field */}
@@ -115,7 +125,6 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter book price"
           className="w-full p-2 border rounded mt-1"
-          step="0.01"
         />
       </div>
 
@@ -132,6 +141,7 @@ const EditBook = () => {
           onChange={handleChange}
           placeholder="Enter stock quantity"
           className="w-full p-2 border rounded mt-1"
+          required
         />
       </div>
 
@@ -151,6 +161,7 @@ const EditBook = () => {
           step="0.1"
           min="1"
           max="5"
+          required
         />
       </div>
 

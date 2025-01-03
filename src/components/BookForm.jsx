@@ -25,22 +25,19 @@ const BookForm = () => {
   };
 
   const validateForm = () => {
-    if (
-      !formData.title ||
-      !formData.author ||
-      !formData.category ||
-      !formData.price ||
-      !formData.stock ||
-      !formData.rating ||
-      !formData.genres
-    ) {
+    const { title, author, category, price, stock, rating, genres } = formData;
+
+    // Check for empty fields
+    if (!title || !author || !category || !price || !stock || !rating || !genres) {
       toast.error("All fields are required!");
       return false;
     }
+
     if (isNaN(formData.price) || isNaN(formData.stock) || isNaN(formData.rating)) {
       toast.error("Price, Stock, and Rating must be numbers.");
       return false;
     }
+
     return true;
   };
 
@@ -50,16 +47,9 @@ const BookForm = () => {
     if (!validateForm()) return;
 
     try {
-      await submitBook({
-        ...formData,
-        genres: formData.genres.split(",").map((genre) => genre.trim()), // Convert genres to array
-      });
-      toast.success("Book updated successfully!");
-
-      // Delay redirection slightly to allow toast to display
-      setTimeout(() => {
-        navigate("/bookList");
-      }, 1000);
+      await submitBook(formData);
+      toast.success("Book submitted successfully");
+      setTimeout(() => navigate("/books"), 1000);
     } catch (error) {
       toast.error(`Error submitting book: ${error.message || "Something went wrong!"}`);
     }
@@ -109,7 +99,6 @@ const BookForm = () => {
               value={formData.category}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
             />
           </div>
           <div>
@@ -123,7 +112,6 @@ const BookForm = () => {
               value={formData.price}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
             />
           </div>
           <div>
@@ -137,7 +125,6 @@ const BookForm = () => {
               value={formData.stock}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
             />
           </div>
           <div>
@@ -152,7 +139,6 @@ const BookForm = () => {
               value={formData.rating}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
             />
           </div>
           <div>
@@ -166,7 +152,6 @@ const BookForm = () => {
               value={formData.genres}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
             />
           </div>
           <div>
