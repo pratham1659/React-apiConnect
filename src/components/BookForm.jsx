@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { submitBook } from "../services/bookService";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -13,6 +14,8 @@ const BookForm = () => {
     genres: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -21,22 +24,42 @@ const BookForm = () => {
     });
   };
 
+  const validateForm = () => {
+    if (
+      !formData.title ||
+      !formData.author ||
+      !formData.category ||
+      !formData.price ||
+      !formData.stock ||
+      !formData.rating ||
+      !formData.genres
+    ) {
+      toast.error("All fields are required!");
+      return false;
+    }
+    if (isNaN(formData.price) || isNaN(formData.stock) || isNaN(formData.rating)) {
+      toast.error("Price, Stock, and Rating must be numbers.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      await submitBook(formData);
-      toast.success("Book submitted successfully");
+    if (!validateForm()) return;
 
-      setFormData({
-        title: "",
-        author: "",
-        category: "",
-        price: "",
-        stock: "",
-        rating: "",
-        genres: "",
+    try {
+      await submitBook({
+        ...formData,
+        genres: formData.genres.split(",").map((genre) => genre.trim()), // Convert genres to array
       });
+      toast.success("Book updated successfully!");
+
+      // Delay redirection slightly to allow toast to display
+      setTimeout(() => {
+        navigate("/bookList");
+      }, 1000);
     } catch (error) {
       toast.error(`Error submitting book: ${error.message || "Something went wrong!"}`);
     }
