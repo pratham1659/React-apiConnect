@@ -28,7 +28,7 @@ function App() {
                 <Link to="/" className="py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300">
                   Home
                 </Link>
-                <Link to="/books" className="py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300">
+                <Link to="/booklist" className="py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300">
                   Book List
                 </Link>
                 <Link to="/add-book" className="py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300">
@@ -55,7 +55,7 @@ function App() {
             <Link to="/" className="block py-2 px-4 text-sm hover:bg-purple-500 hover:text-white transition duration-300">
               Home
             </Link>
-            <Link to="/books" className="block py-2 px-4 text-sm hover:bg-purple-500 hover:text-white transition duration-300">
+            <Link to="/booklist" className="block py-2 px-4 text-sm hover:bg-purple-500 hover:text-white transition duration-300">
               Book List
             </Link>
             <Link to="/add-book" className="block py-2 px-4 text-sm hover:bg-purple-500 hover:text-white transition duration-300">
@@ -75,7 +75,7 @@ function App() {
                 </div>
               }
             />
-            <Route path="/books" element={<BookList />} />
+            <Route path="/booklist" element={<BookList />} />
             <Route path="/add-book" element={<BookForm />} />
             <Route path="/edit-book/:id" element={<BookUpdate />} />
           </Routes>

@@ -58,7 +58,7 @@ const BookUpdate = () => {
     try {
       await updateBook(id, formData);
       toast.success("Book updated successfully");
-      setTimeout(() => navigate("/books"), 1000);
+      setTimeout(() => navigate("/booklist"), 1000);
     } catch (error) {
       toast.error(`Failed to update book - ${error}`);
     }

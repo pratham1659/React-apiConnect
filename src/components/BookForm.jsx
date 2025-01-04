@@ -49,7 +49,7 @@ const BookForm = () => {
     try {
       await submitBook(formData);
       toast.success("Book submitted successfully");
-      setTimeout(() => navigate("/books"), 1000);
+      setTimeout(() => navigate("/booklist"), 1000);
     } catch (error) {
       toast.error(`Error submitting book: ${error.message || "Something went wrong!"}`);
     }
